@@ -1,0 +1,26 @@
+<html>
+
+<head>
+  <title>Adding plans</title>
+</head>
+
+<body>
+    <h1>Add plans to your schedule here:</h1>
+  <form action="/add_plans" method="post">
+    <p>
+      Plan: <br />
+      <input type="text" name="plan" />
+    </p>
+    <p>
+      Hours / week: <br />
+      <input type="integer" name="hours/week" />
+    </p>
+    <p>
+      Info: <br />
+      <textarea name="info" rows="14" cols="23"></textarea>
+    </p>
+    <input type="submit" value="Add this plan to your schedule" />
+  </form>
+</body>
+
+</html>
