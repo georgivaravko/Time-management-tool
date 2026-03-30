@@ -7,6 +7,19 @@ import db, config
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+@app.route("/create_plans", methods=["POST"])
+def create_plans():
+    plan = request.form["plan"]
+    hours_per_week = request.form["hours_per_week"]
+    info = request.form["info"]
+    user_id = session["user_id"]
+
+    sql = "INSERT INTO plans (plan, hours_per_week, info, user_id) VALUES (?, ?, ?, ?)"
+    db.execute(sql, [plan, hours_per_week, info, user_id])
+
+    return redirect("/")
+    
+
 @app.route("/add_plans")
 def add_plans():
     return render_template("add_plans.html")
@@ -46,10 +59,13 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
     
-        sql = "SELECT password_hash FROM users WHERE username = ?"
-        password_hash = db.query(sql, [username])[0][0]
+        sql = "SELECT id, password_hash FROM users WHERE username = ?"
+        result = db.query(sql, [username])[0]
+        user_id = result["id"]
+        password_hash = result["password_hash"]
 
         if check_password_hash(password_hash, password):
+            session["user_id"] = user_id
             session["username"] = username
             return redirect("/")
         else:
@@ -57,5 +73,6 @@ def login():
 
 @app.route("/logout")
 def logout():
+    del session["user_id"]
     del session["username"]
     return redirect("/")
