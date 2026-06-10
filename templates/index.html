@@ -2,14 +2,14 @@
 <html>
 
 <head>
-  <title>Kirjautuminen</title>
+  <title>Log in</title>
 </head>
 
 <body>
   <h1>Time manager</h1>
   {% if session.username %}
   <p>
-    Olet kirjautunut nimellä {{ session.username }}
+    You've logged in as {{ session.username }}
   </p>
   {% endif %}
 

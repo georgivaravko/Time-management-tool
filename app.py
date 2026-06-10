@@ -19,7 +19,6 @@ def create_plans():
 
     return redirect("/")
     
-
 @app.route("/add_plans")
 def add_plans():
     return render_template("add_plans.html")
@@ -38,16 +37,16 @@ def create():
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
+        return "Error: the passwords do not match"
     password_hash = generate_password_hash(password1)
 
     try:
         sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
         db.execute(sql, [username, password_hash])
     except sqlite3.IntegrityError:
-        return "VIRHE: tunnus on jo varattu"
+        return "Error: the usename is taken"
 
-    return "Tunnus luotu"
+    return "Username created :3"
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -67,9 +66,9 @@ def login():
         if check_password_hash(password_hash, password):
             session["user_id"] = user_id
             session["username"] = username
-            return redirect("/")
+            return redirect("/") 
         else:
-            return "VIRHE: väärä tunnus tai salasana"
+            return "Error: incorrect username or password"
 
 @app.route("/logout")
 def logout():

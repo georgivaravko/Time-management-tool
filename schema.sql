@@ -9,5 +9,5 @@ CREATE TABLE  plans (
     plan TEXT,
     hours_per_week INTEGER,
     info TEXT,
-    user_id REFERENCES users
+    user_id INTEGER REFERENCES users
 );
