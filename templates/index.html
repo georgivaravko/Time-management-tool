@@ -9,19 +9,23 @@
   <h1>Time manager</h1>
   {% if session.username %}
   <p>
-    You've logged in as {{ session.username }}
-  </p>
-  {% endif %}
-
-  <p>
-    <a href=/login>Log in</a>
-    <a href=/register>Register</a>
-    <a href=/logout>Log out</a>
-  </p>
-
-  <p>
+    You've logged in as {{ session.username }}<br>
+    <a href=/logout>Log out</a><br>
     <a href=/add_plans>Add plans</a>
   </p>
+  <h2>Your plans:</h2>
+  <ul>
+    {% for plan in plans %}
+    <li><a href="/plan/{{ plan.id }}">{{ plan.plan  }}</a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>
+    Welcome to Time-manager<br>
+    <a href=/login>Log in</a>
+    <a href=/register>Register</a>
+  </p>
+  {% endif %}
 
 </body>
 

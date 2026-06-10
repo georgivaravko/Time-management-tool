@@ -2,10 +2,15 @@ import sqlite3
 from flask import Flask
 from flask import redirect, render_template, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
-import db, config
+import db, config, plans
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+@app.route("/plan/<int:plan_id>")
+def show_plan(plan_id):
+    plan = plans.get_plan(plan_id)
+    return render_template("show_plan.html", plan=plan)
 
 @app.route("/create_plans", methods=["POST"])
 def create_plans():
@@ -14,8 +19,7 @@ def create_plans():
     info = request.form["info"]
     user_id = session["user_id"]
 
-    sql = "INSERT INTO plans (plan, hours_per_week, info, user_id) VALUES (?, ?, ?, ?)"
-    db.execute(sql, [plan, hours_per_week, info, user_id])
+    plans.add_plans(plan, hours_per_week, info, user_id)
 
     return redirect("/")
     
@@ -25,7 +29,8 @@ def add_plans():
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    all_plans = plans.get_plans()
+    return render_template("index.html", plans = all_plans)
 
 @app.route("/register")
 def register():
