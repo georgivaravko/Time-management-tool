@@ -11,10 +11,19 @@ def get_plans():
 
 def get_plan(plan_id):
     sql = """SELECT users.username,
-    plans.plan,
-    plans.hours_per_week,
-    plans.info
-    FROM users, plans
-    WHERE plans.user_id = users.id
-    AND plans.id = ?"""
+        users.id AS user_id,
+        plans.id AS plan_id,
+        plans.plan,
+        plans.hours_per_week,
+        plans.info
+        FROM users, plans
+        WHERE plans.user_id = users.id
+        AND plans.id = ?"""
     return db.query(sql, [plan_id])[0]
+
+def update_plan(plan_id, plan, hours_per_week, info):
+    sql ="""UPDATE plans SET plan = ?,
+        hours_per_week = ?,
+        info = ?
+        WHERE id = ?"""
+    db.execute(sql, [plan, hours_per_week, info, plan_id])

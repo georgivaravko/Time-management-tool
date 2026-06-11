@@ -6,6 +6,11 @@
 
 <body>
     <h1>{{ plan.plan }}</h1> 
+    {% if session.user_id == plan.user_id %}
+  <p>
+    <a href="/edit_plan/{{ plan.plan_id }}">Edit</a>
+  </p>
+    {% endif %}
     <p>Time complexity: {{ plan.hours_per_week }} hours / week<br>
         Information: {{ plan.info }}<br>
         Owner: {{ plan.username }}<br>

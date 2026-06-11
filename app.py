@@ -7,6 +7,22 @@ import db, config, plans
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+@app.route("/update_plan", methods=["POST"])
+def update_plan():
+    plan_id = request.form["plan_id"]
+    plan = request.form["plan"]
+    hours_per_week = request.form["hours_per_week"]
+    info = request.form["info"]
+
+    plans.update_plan(plan_id, plan, hours_per_week, info)
+
+    return redirect("/plan/" + str(plan_id))
+
+@app.route("/edit_plan/<int:plan_id>")
+def edit_plan(plan_id):
+    plan = plans.get_plan(plan_id)
+    return render_template("edit_plan.html", plan=plan)
+
 @app.route("/plan/<int:plan_id>")
 def show_plan(plan_id):
     plan = plans.get_plan(plan_id)

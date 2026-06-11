@@ -1,0 +1,27 @@
+<html>
+
+<head>
+  <title>Edit plan</title>
+</head>
+
+<body>
+    <h1>Edit your plan here:</h1> 
+  <form action="/update_plan" method="post">
+    <p>
+      Plan: <br />
+      <input type="text" name="plan" value="{{ plan.plan }}" />
+    </p>
+    <p>
+      Hours / week: <br />
+      <input type="number" name="hours_per_week" value="{{ plan.hours_per_week }}" />
+    </p>
+    <p>
+      Info: <br />
+      <textarea name="info">{{ plan.info }}</textarea>
+    </p>
+    <input type="hidden" name="plan_id" value="{{ plan.plan_id }}" />
+    <input type="submit" value="Update" />
+  </form>
+</body>
+
+</html>
