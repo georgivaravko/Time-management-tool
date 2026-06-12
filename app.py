@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 import db, config, plans
 
@@ -20,6 +20,10 @@ def search():
 @app.route("/update_plan", methods=["POST"])
 def update_plan():
     plan_id = request.form["plan_id"]
+    plan = plans.get_plan(plan_id)
+    if plan["user_id"] != session["user_id"]:
+        abort(403)
+
     plan = request.form["plan"]
     hours_per_week = request.form["hours_per_week"]
     info = request.form["info"]
@@ -31,12 +35,18 @@ def update_plan():
 @app.route("/edit_plan/<int:plan_id>")
 def edit_plan(plan_id):
     plan = plans.get_plan(plan_id)
+    if plan["user_id"] != session["user_id"]:
+        abort(403)
     return render_template("edit_plan.html", plan=plan)
 
 @app.route("/delete_plan/<int:plan_id>", methods=["GET", "POST"])
 def delete_plan(plan_id):
+    plan = plans.get_plan(plan_id)
+
+    if plan["user_id"] != session["user_id"]:
+        abort(403)
+
     if request.method == "GET":
-        plan = plans.get_plan(plan_id)
         return render_template("delete_plan.html", plan=plan)
 
     if request.method == "POST":
