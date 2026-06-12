@@ -27,3 +27,7 @@ def update_plan(plan_id, plan, hours_per_week, info):
         info = ?
         WHERE id = ?"""
     db.execute(sql, [plan, hours_per_week, info, plan_id])
+
+def delete_plan(plan_id):
+    sql ="DELETE FROM plans WHERE id = ?"
+    db.execute(sql, [plan_id])

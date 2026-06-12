@@ -23,6 +23,19 @@ def edit_plan(plan_id):
     plan = plans.get_plan(plan_id)
     return render_template("edit_plan.html", plan=plan)
 
+@app.route("/delete_plan/<int:plan_id>", methods=["GET", "POST"])
+def delete_plan(plan_id):
+    if request.method == "GET":
+        plan = plans.get_plan(plan_id)
+        return render_template("delete_plan.html", plan=plan)
+
+    if request.method == "POST":
+        if "delete" in request.form:
+            plans.delete_plan(plan_id)
+            return redirect("/")
+        else:
+            return redirect("/plan/" + str(plan_id))
+
 @app.route("/plan/<int:plan_id>")
 def show_plan(plan_id):
     plan = plans.get_plan(plan_id)

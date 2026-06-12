@@ -9,6 +9,7 @@
     {% if session.user_id == plan.user_id %}
   <p>
     <a href="/edit_plan/{{ plan.plan_id }}">Edit</a>
+    <a href="/delete_plan/{{ plan.plan_id }}">Delete</a>
   </p>
     {% endif %}
     <p>Time complexity: {{ plan.hours_per_week }} hours / week<br>
