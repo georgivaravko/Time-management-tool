@@ -10,8 +10,9 @@
   {% if session.username %}
   <p>
     You've logged in as {{ session.username }}<br>
+    <a href=/add_plans>Add plans</a><br>
+    <a href=/search>Search</a><br>
     <a href=/logout>Log out</a><br>
-    <a href=/add_plans>Add plans</a>
   </p>
   <h2>Your plans:</h2>
   <ul>
@@ -22,8 +23,9 @@
   {% else %}
   <p>
     Welcome to Time-manager<br>
-    <a href=/login>Log in</a>
-    <a href=/register>Register</a>
+    <a href=/login>Log in</a><br>
+    <a href=/register>Register</a><br>
+    <a href=/search>Search</a>
   </p>
   {% endif %}
 

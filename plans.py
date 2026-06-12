@@ -31,3 +31,11 @@ def update_plan(plan_id, plan, hours_per_week, info):
 def delete_plan(plan_id):
     sql ="DELETE FROM plans WHERE id = ?"
     db.execute(sql, [plan_id])
+
+def search(query):
+    sql = """SELECT id, plan
+        FROM plans
+        WHERE plan LIKE ? OR info LIKE ?
+        ORDER BY hours_per_week DESC"""
+    like = "%" + query + "%"
+    return db.query(sql, [like, like])

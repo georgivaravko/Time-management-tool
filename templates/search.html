@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Search</title>
+</head>
+
+<body>
+    <h1>Search</h1>
+    <form action="/search" method="get">
+        <p>
+            Keyword: <input type="text" name="query" value="{{ query }}">
+        </p>
+        <input type="submit" value="Search">
+
+    <p>
+        <a href="/">To the main page-></a>
+    </p>
+    
+    </form>
+    {% if query %}
+    <h2>Results:</h2>
+
+    <ul>
+        {% for plan in results %}
+        <li><a href="/plan/{{ plan.id }}">{{ plan.plan }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+
+</html>

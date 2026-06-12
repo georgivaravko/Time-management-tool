@@ -7,6 +7,16 @@ import db, config, plans
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+@app.route("/search")
+def search():
+    query = request.args.get("query")
+    if query:
+        results = plans.search(query)
+    else:
+        query = ""
+        results = []
+    return render_template("search.html",query=query, results=results)
+
 @app.route("/update_plan", methods=["POST"])
 def update_plan():
     plan_id = request.form["plan_id"]
