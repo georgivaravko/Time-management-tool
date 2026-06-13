@@ -21,6 +21,8 @@ def search():
 def update_plan():
     plan_id = request.form["plan_id"]
     plan = plans.get_plan(plan_id)
+    if not plan:
+        abort(404)
     if plan["user_id"] != session["user_id"]:
         abort(403)
 
@@ -35,6 +37,8 @@ def update_plan():
 @app.route("/edit_plan/<int:plan_id>")
 def edit_plan(plan_id):
     plan = plans.get_plan(plan_id)
+    if not plan:
+        abort(404)
     if plan["user_id"] != session["user_id"]:
         abort(403)
     return render_template("edit_plan.html", plan=plan)
@@ -43,6 +47,8 @@ def edit_plan(plan_id):
 def delete_plan(plan_id):
     plan = plans.get_plan(plan_id)
 
+    if not plan:
+            abort(404)
     if plan["user_id"] != session["user_id"]:
         abort(403)
 
@@ -59,6 +65,8 @@ def delete_plan(plan_id):
 @app.route("/plan/<int:plan_id>")
 def show_plan(plan_id):
     plan = plans.get_plan(plan_id)
+    if not plan:
+        abort(404)
     return render_template("show_plan.html", plan=plan)
 
 @app.route("/create_plans", methods=["POST"])

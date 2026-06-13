@@ -19,7 +19,8 @@ def get_plan(plan_id):
         FROM users, plans
         WHERE plans.user_id = users.id
         AND plans.id = ?"""
-    return db.query(sql, [plan_id])[0]
+    result = db.query(sql, [plan_id])
+    return result[0] if result else None
 
 def update_plan(plan_id, plan, hours_per_week, info):
     sql ="""UPDATE plans SET plan = ?,
