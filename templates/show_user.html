@@ -1,0 +1,23 @@
+<html>
+
+<head>
+  <title>{{ user.username }}</title>
+</head>
+
+<body>
+    <h1>{{ user.username }}</h1> 
+    <p>
+        Number of users plans: {{plans | count }}.
+    </p>
+    <h2>Users plans:</h2>
+    <ul>
+        {% for plan in plans %}
+        <li><a href="/plan/{{plan.id}}">{{plan.plan}}</a></li>
+        {% endfor %}
+    </ul>
+  </p>
+    <a href="/">To main page</a>
+    </p>
+</body>
+
+</html>

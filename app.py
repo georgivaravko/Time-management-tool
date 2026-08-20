@@ -2,10 +2,18 @@ import sqlite3
 from flask import Flask
 from flask import redirect, render_template, request, session, abort
 from werkzeug.security import generate_password_hash, check_password_hash
-import db, config, plans
+import db, config, plans, users
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+@app.route("/user/<int:user_id>")
+def show_user(user_id):
+    user = users.get_user(user_id)
+    if not user:
+        abort(404)
+    plans = users.get_users_plans(user_id)
+    return render_template("show_user.html", user=user, plans=plans)
 
 def require_login():
     if "user_id" not in session:

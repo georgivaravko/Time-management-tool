@@ -14,7 +14,7 @@
     {% endif %}
     <p>Time complexity: {{ plan.hours_per_week }} hours / week<br>
         Information: {{ plan.info }}<br>
-        Owner: {{ plan.username }}<br>
+        Owner: <a href="/user/{{plan.user_id}}">{{ plan.username }}</a><br>
         <a href="/">To main page</a>
     </p>
 </body>
