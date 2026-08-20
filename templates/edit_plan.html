@@ -9,15 +9,15 @@
   <form action="/update_plan" method="post">
     <p>
       Plan: <br />
-      <input type="text" name="plan" value="{{ plan.plan }}" />
+      <input type="text" name="plan" value="{{ plan.plan }}" maxlength="50" required/>
     </p>
     <p>
       Hours / week: <br />
-      <input type="number" name="hours_per_week" value="{{ plan.hours_per_week }}" />
+      <input type="number" name="hours_per_week" value="{{ plan.hours_per_week }}" maxlength="2" pattern="[1-9][0-9]{0,2}" required/>
     </p>
     <p>
       Info: <br />
-      <textarea name="info">{{ plan.info }}</textarea>
+      <textarea name="info" maxlength="1000">{{ plan.info }}</textarea>
     </p>
     <input type="hidden" name="plan_id" value="{{ plan.plan_id }}" />
     <input type="submit" value="Update" />

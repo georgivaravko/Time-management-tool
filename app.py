@@ -31,8 +31,20 @@ def update_plan():
         abort(403)
 
     plan = request.form["plan"]
+    if not plan or len(plan) > 50:
+            abort(403)
+
     hours_per_week = request.form["hours_per_week"]
+    try:
+        hours_per_week = int(hours_per_week)
+    except:
+        abort(403)
+    if not hours_per_week or (hours_per_week > 99):
+        abort(403)
+
     info = request.form["info"]
+    if len(info) > 1000:
+            abort(403)
 
     plans.update_plan(plan_id, plan, hours_per_week, info)
 
@@ -43,7 +55,7 @@ def edit_plan(plan_id):
     require_login()
 
     plan = plans.get_plan(plan_id)
-    if not plan:
+    if not plan :
         abort(404)
     if plan["user_id"] != session["user_id"]:
         abort(403)
@@ -80,8 +92,18 @@ def create_plans():
     require_login()
 
     plan = request.form["plan"]
+    if not plan or len(plan) > 50:
+        abort(403)
     hours_per_week = request.form["hours_per_week"]
+    try:
+        hours_per_week = int(hours_per_week)
+    except:
+        abort(403)
+    if not hours_per_week or (hours_per_week > 99):
+        abort(403)
     info = request.form["info"]
+    if len(info) > 1000:
+        abort(403)
     user_id = session["user_id"]
 
     plans.add_plans(plan, hours_per_week, info, user_id)
