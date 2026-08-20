@@ -9,6 +9,11 @@ def get_plans():
 
     return db.query(sql)
 
+def get_users_plans(user_id):
+    sql = """SELECT id, plan FROM plans WHERE plans.user_id = ? ORDER BY hours_per_week DESC"""
+
+    return db.query(sql, [user_id])
+
 def get_plan(plan_id):
     sql = """SELECT users.username,
         users.id AS user_id,

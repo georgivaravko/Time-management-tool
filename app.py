@@ -7,6 +7,10 @@ import db, config, plans
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+def require_login():
+    if "user_id" not in session:
+        abort(403)
+
 @app.route("/search")
 def search():
     query = request.args.get("query")
@@ -36,6 +40,8 @@ def update_plan():
 
 @app.route("/edit_plan/<int:plan_id>")
 def edit_plan(plan_id):
+    require_login()
+
     plan = plans.get_plan(plan_id)
     if not plan:
         abort(404)
@@ -71,6 +77,8 @@ def show_plan(plan_id):
 
 @app.route("/create_plans", methods=["POST"])
 def create_plans():
+    require_login()
+
     plan = request.form["plan"]
     hours_per_week = request.form["hours_per_week"]
     info = request.form["info"]
@@ -82,12 +90,17 @@ def create_plans():
     
 @app.route("/add_plans")
 def add_plans():
+    require_login()
     return render_template("add_plans.html")
 
 @app.route("/")
 def index():
     all_plans = plans.get_plans()
-    return render_template("index.html", plans = all_plans)
+    if "user_id" in session:
+        users_plans = plans.get_users_plans("user_id")
+    else:
+        users_plans = None
+    return render_template("index.html", plans = all_plans, users_plans = users_plans)
 
 @app.route("/register")
 def register():

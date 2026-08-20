@@ -15,6 +15,16 @@
     <a href=/logout>Log out</a><br>
   </p>
   <h2>Your plans:</h2>
+  {% if users_plans %}
+  <ul>
+    {% for plan in users_plans %}
+    <li><a href="/plan/{{ plan.id }}">{{ plan.plan  }}</a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No plans</p>
+  {% endif %}
+  <h2>Everyones plans:</h2>
   <ul>
     {% for plan in plans %}
     <li><a href="/plan/{{ plan.id }}">{{ plan.plan  }}</a></li>
@@ -27,6 +37,13 @@
     <a href=/register>Register</a><br>
     <a href=/search>Search</a>
   </p>
+
+  <h2>Everyones plans:</h2>
+  <ul>
+    {% for plan in plans %}
+    <li><a href="/plan/{{ plan.id }}">{{ plan.plan  }}</a></li>
+    {% endfor %}
+  </ul>
   {% endif %}
 
 </body>
