@@ -1,8 +1,21 @@
 import db
 
-def add_plans(plan, hours_per_week, info, user_id):
+def get_plan_class(plan_id):
+    sql = "SELECT plan_class FROM plan_classes WHERE plan_id = ?"
+    result = db.query(sql, [plan_id])
+    if result:
+        return result[0]["plan_class"]
+    return None
+
+def add_plans(plan, hours_per_week, info, user_id, plan_class):
     sql = "INSERT INTO plans (plan, hours_per_week, info, user_id) VALUES (?, ?, ?, ?)"
     db.execute(sql, [plan, hours_per_week, info, user_id])
+
+    plan_id = db.last_insert_id()
+
+    sql = "INSERT INTO plan_classes (plan_id, plan_class) VALUES (?, ?)"
+    db.execute(sql, [plan_id, plan_class])
+
 
 def get_plans():
     sql = """SELECT id, plan FROM plans ORDER BY hours_per_week DESC"""

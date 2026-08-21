@@ -11,3 +11,9 @@ CREATE TABLE  plans (
     info TEXT,
     user_id INTEGER REFERENCES users
 );
+
+CREATE TABLE plan_classes (
+    id INTEGER PRIMARY KEY,
+    plan_id INTEGER REFERENCES plans,
+    plan_class TEXT
+);

@@ -93,7 +93,8 @@ def show_plan(plan_id):
     plan = plans.get_plan(plan_id)
     if not plan:
         abort(404)
-    return render_template("show_plan.html", plan=plan)
+    plan_class = plans.get_plan_class(plan_id)
+    return render_template("show_plan.html", plan=plan, plan_class=plan_class)
 
 @app.route("/create_plans", methods=["POST"])
 def create_plans():
@@ -114,7 +115,9 @@ def create_plans():
         abort(403)
     user_id = session["user_id"]
 
-    plans.add_plans(plan, hours_per_week, info, user_id)
+    plan_class = request.form["plan_class"]
+
+    plans.add_plans(plan, hours_per_week, info, user_id, plan_class)
 
     return redirect("/")
     
