@@ -19,17 +19,17 @@
       Info: <br />
       <textarea name="info" maxlength="1000"></textarea>
     </p>
-    <p>Class: <br />
-      <select name="plan_class">
-          <option value="">(Assign)</option>
-          <option value="mandatory">Mandatory</option>
-          <option value="work">Work</option>
-          <option value="school">School</option>
-          <option value="personla">Personal</option>
-          <option value="hobby">Hobby</option>
-          <option value="leisure">Leisure</option>
+    {% for class in classes %}
+    <p>
+      {{ class }}: <br />
+      <select name="classes">
+        <option value="">(choose)</option>
+        {% for option in classes[class] %}
+        <option value="{{ class }}:{{ option }}">{{ option }}</option>
+        {% endfor %}
       </select>
     </p>
+    {% endfor %}
     <input type="submit" value="Add this plan to your schedule" />
   </form>
 </body>

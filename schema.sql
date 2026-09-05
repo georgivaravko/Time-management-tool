@@ -15,5 +15,12 @@ CREATE TABLE  plans (
 CREATE TABLE plan_classes (
     id INTEGER PRIMARY KEY,
     plan_id INTEGER REFERENCES plans,
-    plan_class TEXT
+    title TEXT,
+    value TEXT
+);
+
+CREATE TABLE classes (
+    id INTEGER PRIMARY KEY,
+    title TEXT,
+    value TEXT
 );

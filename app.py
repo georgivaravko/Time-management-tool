@@ -54,7 +54,13 @@ def update_plan():
     if len(info) > 1000:
             abort(403)
 
-    plans.update_plan(plan_id, plan, hours_per_week, info)
+    classes = []
+    for entry in request.form.getlist("classes"):
+        if entry:
+            parts = entry.split(":")
+            classes.append((parts[0], parts[1]))
+
+    plans.update_plan(plan_id, plan, hours_per_week, info, classes)
 
     return redirect("/plan/" + str(plan_id))
 
@@ -67,12 +73,15 @@ def edit_plan(plan_id):
         abort(404)
     if plan["user_id"] != session["user_id"]:
         abort(403)
-    return render_template("edit_plan.html", plan=plan)
+    classes = plans.get_classes(plan_id)
+    all_classes = plans.get_all_classes()
+    return render_template("edit_plan.html", plan=plan, classes=classes, all_classes=all_classes)
 
 @app.route("/delete_plan/<int:plan_id>", methods=["GET", "POST"])
 def delete_plan(plan_id):
-    plan = plans.get_plan(plan_id)
+    require_login()
 
+    plan = plans.get_plan(plan_id)
     if not plan:
             abort(404)
     if plan["user_id"] != session["user_id"]:
@@ -93,8 +102,8 @@ def show_plan(plan_id):
     plan = plans.get_plan(plan_id)
     if not plan:
         abort(404)
-    plan_class = plans.get_plan_class(plan_id)
-    return render_template("show_plan.html", plan=plan, plan_class=plan_class)
+    classes = plans.get_classes(plan_id)
+    return render_template("show_plan.html", plan=plan, classes=classes)
 
 @app.route("/create_plans", methods=["POST"])
 def create_plans():
@@ -113,18 +122,24 @@ def create_plans():
     info = request.form["info"]
     if len(info) > 1000:
         abort(403)
+
     user_id = session["user_id"]
 
-    plan_class = request.form["plan_class"]
+    classes = []
+    for entry in request.form.getlist("classes"):
+        if entry:
+            parts = entry.split(":")
+            classes.append((parts[0], parts[1]))
 
-    plans.add_plans(plan, hours_per_week, info, user_id, plan_class)
+    plans.add_plans(plan, hours_per_week, info, user_id, classes)
 
     return redirect("/")
     
 @app.route("/add_plans")
 def add_plans():
     require_login()
-    return render_template("add_plans.html")
+    classes = plans.get_all_classes()
+    return render_template("add_plans.html", classes=classes)
 
 @app.route("/")
 def index():

@@ -19,6 +19,17 @@
       Info: <br />
       <textarea name="info" maxlength="1000">{{ plan.info }}</textarea>
     </p>
+    {% for class in all_classes %}
+    <p>
+      {{ class }}: <br />
+      <select name="classes">
+        <option value="">(option)</option>
+        {% for option in all_classes[class] %}
+        <option value="{{ class }}:{{ option }}">{{ option }}</option>
+        {% endfor %}
+      </select>
+    </p>
+    {% endfor %}
     <input type="hidden" name="plan_id" value="{{ plan.plan_id }}" />
     <input type="submit" value="Update" />
   </form>

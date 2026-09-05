@@ -1,20 +1,30 @@
 import db
 
-def get_plan_class(plan_id):
-    sql = "SELECT plan_class FROM plan_classes WHERE plan_id = ?"
-    result = db.query(sql, [plan_id])
-    if result:
-        return result[0]["plan_class"]
-    return None
+def get_all_classes():
+    sql = "SELECT title, value FROM classes ORDER BY id"
+    result = db.query(sql)
 
-def add_plans(plan, hours_per_week, info, user_id, plan_class):
+    classes = {}
+    for title, value in result:
+        classes[title] = []
+    for title, value in result:
+        classes[title].append(value)
+
+    return classes
+
+def get_classes(plan_id):
+    sql = "SELECT title, value FROM plan_classes WHERE plan_id = ?"
+    return db.query(sql, [plan_id])
+
+def add_plans(plan, hours_per_week, info, user_id, classes):
     sql = "INSERT INTO plans (plan, hours_per_week, info, user_id) VALUES (?, ?, ?, ?)"
     db.execute(sql, [plan, hours_per_week, info, user_id])
 
     plan_id = db.last_insert_id()
 
-    sql = "INSERT INTO plan_classes (plan_id, plan_class) VALUES (?, ?)"
-    db.execute(sql, [plan_id, plan_class])
+    sql = "INSERT INTO plan_classes (plan_id, title, value) VALUES (?, ?, ?)"
+    for title, value in classes:
+        db.execute(sql, [plan_id, title, value])
 
 
 def get_plans():
@@ -40,14 +50,22 @@ def get_plan(plan_id):
     result = db.query(sql, [plan_id])
     return result[0] if result else None
 
-def update_plan(plan_id, plan, hours_per_week, info):
+def update_plan(plan_id, plan, hours_per_week, info, classes):
     sql ="""UPDATE plans SET plan = ?,
         hours_per_week = ?,
         info = ?
         WHERE id = ?"""
     db.execute(sql, [plan, hours_per_week, info, plan_id])
 
+    sql = "DELETE FROM plan_classes WHERE plan_id = ?"
+    db.execute(sql, [plan_id])
+    sql = "INSERT INTO plan_classes (plan_id, title, value) VALUES (?, ?, ?)"
+    for title, value in classes:
+        db.execute(sql, [plan_id, title, value])
+
 def delete_plan(plan_id):
+    sql = "DELETE FROM plan_classes WHERE plan_id = ?"
+    db.execute(sql, [plan_id])
     sql ="DELETE FROM plans WHERE id = ?"
     db.execute(sql, [plan_id])
 

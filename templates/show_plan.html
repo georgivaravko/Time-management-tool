@@ -16,9 +16,14 @@
         Information: {{ plan.info }}<br>
         Owner: <a href="/user/{{plan.user_id}}">{{ plan.username }}</a><br>
     </p>
-    {% if plan_class %}
+    {% if classes %}
     <p>
-      Plan class: {{plan_class}}
+      Classifications:
+      <ul>
+      {% for class in classes %}
+      <li>{{ class.title }}: {{ class.value }}</li>
+      {% endfor %}
+      </ul>
     </p>
     {% endif %}
     <p>
