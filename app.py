@@ -73,8 +73,14 @@ def edit_plan(plan_id):
         abort(404)
     if plan["user_id"] != session["user_id"]:
         abort(403)
-    classes = plans.get_classes(plan_id)
+    
     all_classes = plans.get_all_classes()
+    classes = {}
+    for my_class in all_classes:
+        classes[my_class] = ""
+    for entry in plans.get_classes(plan_id):
+        classes[entry["title"]] = entry["value"]
+
     return render_template("edit_plan.html", plan=plan, classes=classes, all_classes=all_classes)
 
 @app.route("/delete_plan/<int:plan_id>", methods=["GET", "POST"])

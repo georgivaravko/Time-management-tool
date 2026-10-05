@@ -59,6 +59,10 @@ def update_plan(plan_id, plan, hours_per_week, info, classes):
 
     sql = "DELETE FROM plan_classes WHERE plan_id = ?"
     db.execute(sql, [plan_id])
+
+    sql = "DELETE FROM plan_classes WHERE plan_id = ?"
+    db.execute(sql, [plan_id])
+    
     sql = "INSERT INTO plan_classes (plan_id, title, value) VALUES (?, ?, ?)"
     for title, value in classes:
         db.execute(sql, [plan_id, title, value])
