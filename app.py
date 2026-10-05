@@ -54,11 +54,16 @@ def update_plan():
     if len(info) > 1000:
             abort(403)
 
+    all_classes = plans.get_all_classes()
     classes = []
     for entry in request.form.getlist("classes"):
         if entry:
-            parts = entry.split(":")
-            classes.append((parts[0], parts[1]))
+            title, value = entry.split(":")
+            if title not in all_classes:
+                abort(403)
+            if value not in all_classes[title]:
+                abort(403)
+            classes.append((title, value))
 
     plans.update_plan(plan_id, plan, hours_per_week, info, classes)
 
@@ -130,12 +135,17 @@ def create_plans():
         abort(403)
 
     user_id = session["user_id"]
+    all_classes = plans.get_all_classes()
 
     classes = []
     for entry in request.form.getlist("classes"):
         if entry:
-            parts = entry.split(":")
-            classes.append((parts[0], parts[1]))
+            title, value = entry.split(":")
+            if title not in all_classes:
+                abort(403)
+            if value not in all_classes[title]:
+                abort(403)
+            classes.append((title, value))
 
     plans.add_plans(plan, hours_per_week, info, user_id, classes)
 
