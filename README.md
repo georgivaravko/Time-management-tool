@@ -1,10 +1,29 @@
 # Time-management-tool
 Ajanhallinta-sovellus TKT20019 kurssia varten Helsingin yliopistolla.
 
-- Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
-- Käyttäjä pystyy lisäämään sovellukseen menojaan. Lisäksi käyttäjä pystyy muokkaamaan ja poistamaan lisäämiään menojaan.
-- Käyttäjä näkee sovellukseen lisätyt oletusmenot (kuten uni ja lepo). Käyttäjä näkee sekä itse lisäämänsä että muiden käyttäjien lisäämät menot.
-- Käyttäjä pystyy etsimään menoja hakusanalla tai muulla perusteella. Käyttäjä pystyy hakemaan sekä itse lisäämiään että muiden käyttäjien lisäämiä menoja.
-- Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja ja käyttäjän lisäämät menot (tämä olisi hyvä toteuttaa niin, että henkilöiden menot näkyvät anonyymeinä).
-- Käyttäjä pystyy valitsemaan menolleen yhden tai useamman luokittelun. Mahdolliset luokat ovat tietokannassa.
-- Sovelluksessa on pääasiallisen tietokohteen lisäksi toissijainen tietokohde, joka täydentää pääasiallista tietokohdetta. Käyttäjä pystyy lisäämään toissijaisia tietokohteita omiin ja muiden käyttäjien tietokohteisiin liittyen. Esimerkiksi menojen tärkeys, aikavaativuus ja ehä muuta mitä nyt tuleekaan mieleen.
+- [X] Tunnuksen luonti ja kirjautuminen.
+- [X] Suunnitelmien lisääminen ja poistaminen.
+- [] Käyttäjä näkee sovellukseen lisätyt oletusmenot (kuten uni ja lepo).
+- [] Käyttäjä näkee sekä itse lisäämänsä että muiden käyttäjien lisäämät menot.
+- [] Käyttäjä pystyy etsimään omia ja muiden menoja hakusanalla.
+- [] Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja.
+- [X] Käyttäjä pystyy valitsemaan menolleen yhden tai useamman luokittelun. Mahdolliset luokat ovat tietokannassa.
+- [] Käyttäjä voi "tykätä" toisen käyttäjän menoista.
+
+# Sovelluksen asennus
+
+Asenna "flask"-kirjasto:
+```
+$ pip install flask
+```
+
+Luo tietokanta:
+```
+$ sqlite3 database.db < schema.sql
+$ sqlite3 database.db < init.sql
+```
+
+Käynnistä sovellus:
+```
+$ flask run
+```
