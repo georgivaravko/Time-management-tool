@@ -3,12 +3,12 @@ Ajanhallinta-sovellus TKT20019 kurssia varten Helsingin yliopistolla.
 
 - [X] Tunnuksen luonti ja kirjautuminen.
 - [X] Suunnitelmien lisääminen ja poistaminen.
-- [] Käyttäjä näkee sovellukseen lisätyt oletusmenot (kuten uni ja lepo).
-- [] Käyttäjä näkee sekä itse lisäämänsä että muiden käyttäjien lisäämät menot.
-- [] Käyttäjä pystyy etsimään omia ja muiden menoja hakusanalla.
-- [] Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja.
+- [ ] Käyttäjä näkee sovellukseen lisätyt oletusmenot (kuten uni ja lepo).
+- [ ] Käyttäjä näkee sekä itse lisäämänsä että muiden käyttäjien lisäämät menot.
+- [ ] Käyttäjä pystyy etsimään omia ja muiden menoja hakusanalla.
+- [ ] Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja.
 - [X] Käyttäjä pystyy valitsemaan menolleen yhden tai useamman luokittelun. Mahdolliset luokat ovat tietokannassa.
-- [] Käyttäjä voi "tykätä" toisen käyttäjän menoista.
+- [ ] Käyttäjä voi "tykätä" toisen käyttäjän menoista.
 
 # Sovelluksen asennus
 
