@@ -26,6 +26,12 @@
       </ul>
     </p>
     {% endif %}
+    <h5>Likes: {{ likes }}</h5>
+    <form action="/like" method="post">
+      <input type="hidden" name="plan_id" value="{{ plan.plan_id }}" />
+      <input type="hidden" name="user_id" value="{{ session.user_id }}" />
+      <input type="submit" value="Like!" />
+    </form>
     <p>
     <a href="/">To main page</a>
     </p>

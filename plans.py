@@ -62,7 +62,7 @@ def update_plan(plan_id, plan, hours_per_week, info, classes):
 
     sql = "DELETE FROM plan_classes WHERE plan_id = ?"
     db.execute(sql, [plan_id])
-    
+
     sql = "INSERT INTO plan_classes (plan_id, title, value) VALUES (?, ?, ?)"
     for title, value in classes:
         db.execute(sql, [plan_id, title, value])
@@ -80,3 +80,21 @@ def search(query):
         ORDER BY hours_per_week DESC"""
     like = "%" + query + "%"
     return db.query(sql, [like, like])
+
+def like(plan_id, user_id):
+    sql = "SELECT * FROM likes WHERE plan_id = ? and user_id = ?"
+    result = db.query(sql, [plan_id, user_id])
+    print(result)
+    if not result:
+        sql = "INSERT INTO likes (plan_id, user_id) VALUES (?, ?)"
+        db.execute(sql, [plan_id, user_id])
+    else:
+        sql = "DELETE FROM likes WHERE user_id = ? AND plan_id = ?"
+        db.execute(sql, [user_id, plan_id])
+
+def likes(plan_id):
+    sql = "SELECT COUNT(id) AS count FROM likes WHERE plan_id = ?"
+    result = db.query(sql, [plan_id])
+    if result:
+        return result[0]["count"]
+    #return 0

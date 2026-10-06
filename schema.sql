@@ -24,3 +24,10 @@ CREATE TABLE classes (
     title TEXT,
     value TEXT
 );
+
+CREATE TABLE likes (
+    id INTEGER PRIMARY KEY,
+    plan_id INTEGER REFERENCES plans,
+    user_id INTEGER REFERENCES users,
+    likes INTEGER
+);

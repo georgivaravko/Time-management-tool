@@ -7,6 +7,20 @@ import db, config, plans, users
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+@app.route("/like", methods=["POST"])
+def like():
+    require_login()
+    user_id = request.form["user_id"]
+
+    plan_id = request.form["plan_id"]
+    plan = plans.get_plan(plan_id)
+    if not plan:
+        abort(403)
+
+    plans.like(plan_id, user_id)
+
+    return redirect("/plan/" + str(plan_id))
+
 @app.route("/user/<int:user_id>")
 def show_user(user_id):
     user = users.get_user(user_id)
@@ -114,7 +128,8 @@ def show_plan(plan_id):
     if not plan:
         abort(404)
     classes = plans.get_classes(plan_id)
-    return render_template("show_plan.html", plan=plan, classes=classes)
+    likes = plans.likes(plan_id)
+    return render_template("show_plan.html", plan=plan, classes=classes, likes = likes)
 
 @app.route("/create_plans", methods=["POST"])
 def create_plans():
