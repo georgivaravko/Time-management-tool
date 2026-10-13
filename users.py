@@ -1,12 +1,24 @@
 import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
+def get_profile_picture(user_id):
+    sql = "SELECT profile_picture FROM users WHERE id = ?"
+    result = db.query(sql, [user_id])
+    if result and result[0]["profile_picture"]:
+        return result[0]["profile_picture"]
+    return None
+
+def update_profile_picture(user_id, profile_picture):
+    sql = "UPDATE users SET profile_picture = ? WHERE id = ?"
+    db.execute(sql, [profile_picture, user_id])
+
 def get_user(user_id):
-    sql = """SELECT id, username
-        FROM users
-        WHERE id = ?"""
+    sql = """SELECT id, username, profile_picture IS NOT NULL has_image
+             FROM users
+             WHERE id = ?"""
     result = db.query(sql, [user_id])
     return result[0] if result else None
+
 
 def get_users_plans(user_id):
     sql = """SELECT id, plan

@@ -5,9 +5,15 @@
 </head>
 
 <body>
-    <h1>{{ user.username }}</h1> 
+    <h1>{{ user.username }}</h1>
+     {% if user.has_image %}
+      <img src="/profile_picture/{{ user.id }}" />
+      {% endif %}
+    {% if session.user_id == user.id %}
+    <a href="/add_profile_picture">Update profile picture</a>
+    {% endif %}
     <p>
-        Number of users plans: {{plans | count }}.
+        Number of users plans: {{plans | count }}
     </p>
     <h2>Users plans:</h2>
     <ul>

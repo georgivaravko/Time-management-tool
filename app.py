@@ -1,11 +1,41 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session, abort
+from flask import redirect, make_response, render_template, request, session, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 import db, config, plans, users
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+@app.route("/profile_picture/<int:user_id>")
+def show_profile_picture(user_id):
+    profile_picture = users.get_profile_picture(user_id)
+    if not profile_picture:
+        abort(404)
+
+    response = make_response(bytes(profile_picture))
+    response.headers.set("Content-Type", "image/jpeg")
+    return response
+
+@app.route("/add_profile_picture", methods=["GET", "POST"])
+def add_profile_picture():
+    require_login()
+
+    if request.method == "GET":
+        return render_template("profile_picture.html")
+
+    if request.method == "POST":
+        file = request.files["profile_picture"]
+        if not file.filename.endswith(".jpg"):
+            return "Error: please submit a .jpg file"
+
+        profile_picture = file.read()
+        if len(profile_picture) > 100 * 1024:
+            return "Error: the picture dimensions are too large"
+
+        user_id = session["user_id"]
+        users.update_profile_picture(user_id, profile_picture)
+        return redirect("/user/" + str(user_id))
 
 @app.route("/like", methods=["POST"])
 def like():

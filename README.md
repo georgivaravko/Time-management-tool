@@ -8,7 +8,7 @@ Ajanhallinta-sovellus TKT20019 kurssia varten Helsingin yliopistolla.
 - [ ] Käyttäjä pystyy etsimään omia ja muiden menoja hakusanalla.
 - [ ] Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja.
 - [X] Käyttäjä pystyy valitsemaan menolleen yhden tai useamman luokittelun. Mahdolliset luokat ovat tietokannassa.
-- [ ] Käyttäjä voi "tykätä" toisen käyttäjän menoista.
+- [x] Käyttäjä voi "tykätä" toisen käyttäjän menoista.
 
 # Sovelluksen asennus
 
