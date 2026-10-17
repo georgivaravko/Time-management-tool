@@ -1,8 +1,12 @@
-import sqlite3, secrets
+import sqlite3
+import secrets
 from flask import Flask
 from flask import redirect, make_response, render_template, request, session, abort
 from werkzeug.security import generate_password_hash, check_password_hash
-import db, config, plans, users
+import db
+import config
+import plans
+import users
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -69,8 +73,7 @@ def show_user(user_id):
 
 def require_login():
     if "user_id" not in session:
-        return "Please, log in."
-    return None
+        abort(403)
 
 @app.route("/search")
 def search():
@@ -94,7 +97,7 @@ def update_plan():
 
     plan = request.form["plan"]
     if not plan or len(plan) > 50 or len(plan) == 0:
-            return "Please make sure the plan title has 2 to 50 characters."
+        return "Please make sure the plan title has 2 to 50 characters."
 
     hours_per_week = request.form["hours_per_week"]
     try:
@@ -106,7 +109,7 @@ def update_plan():
 
     info = request.form["info"]
     if len(info) > 1000:
-            return "Please, make sure the plan info is no longer than 1000 characters."
+        return "Please, make sure the plan info is no longer than 1000 characters."
 
     all_classes = plans.get_all_classes()
     classes = []
@@ -132,7 +135,7 @@ def edit_plan(plan_id):
         abort(404)
     if plan["user_id"] != session["user_id"]:
         return "Unfortunately, it seems you do not have permission to edit this plan."
-    
+
     all_classes = plans.get_all_classes()
     classes = {}
     for my_class in all_classes:
@@ -150,7 +153,8 @@ def delete_plan(plan_id):
     if not plan:
         abort(404)
     if plan["user_id"] != session["user_id"]:
-        return "Unfortunately you do not have permission to delete this plan.\nThis plan is not yours."
+        return "Unfortunately you do not have permission" \
+        "to delete this plan.\nThis plan is not yours."
 
     if request.method == "GET":
         return render_template("delete_plan.html", plan=plan)
@@ -205,9 +209,9 @@ def create_plans():
             classes.append((title, value))
 
     plans.add_plans(plan, hours_per_week, info, user_id, classes)
-
-    return redirect("/")
     
+    return redirect("/")
+
 @app.route("/add_plans")
 def add_plans():
     require_login()
@@ -218,9 +222,10 @@ def add_plans():
 def index():
     all_plans = plans.get_plans()
     if "user_id" in session:
-        users_plans = plans.get_users_plans("user_id")
+        users_plans = plans.get_users_plans(session["user_id"])
     else:
         users_plans = None
+    print(users_plans)
     return render_template("index.html", plans = all_plans, users_plans = users_plans)
 
 @app.route("/register")
@@ -234,8 +239,10 @@ def create():
     password2 = request.form["password2"]
     if password1 != password2:
         return "Error: the passwords do not match"
-    if " " in username or " " in password1 or " " in password2:
+    if " " in username or " " in password1:
         return "Please do not use a space character in your username or password."
+    if len(password1) < 8:
+        return "Please, make up a password that will be at least eigth characters long."
 
     try:
         users.create_user(username, password1)
@@ -252,13 +259,13 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-    
+
         user_id = users.check_login(username, password)
         if user_id:
             session["user_id"] = user_id
             session["username"] = username
             session["csrf_token"] = secrets.token_hex(16)
-            return redirect("/") 
+            return redirect("/")
         else:
             return "Error: incorrect username or password"
 
