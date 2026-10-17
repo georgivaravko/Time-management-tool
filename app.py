@@ -53,7 +53,7 @@ def like():
     plan_id = request.form["plan_id"]
     plan = plans.get_plan(plan_id)
     if not plan:
-        abort(403)
+        return "Please make sure the plan you want to like exists."
 
     plans.like(plan_id, user_id)
 
@@ -69,7 +69,8 @@ def show_user(user_id):
 
 def require_login():
     if "user_id" not in session:
-        abort(403)
+        return "Please, log in."
+    return None
 
 @app.route("/search")
 def search():
@@ -89,23 +90,23 @@ def update_plan():
     if not plan:
         abort(404)
     if plan["user_id"] != session["user_id"]:
-        abort(403)
+        return "Unfortunately, it seems you do not have permission do edit this plan."
 
     plan = request.form["plan"]
-    if not plan or len(plan) > 50:
-            abort(403)
+    if not plan or len(plan) > 50 or len(plan) == 0:
+            return "Please make sure the plan title has 2 to 50 characters."
 
     hours_per_week = request.form["hours_per_week"]
     try:
         hours_per_week = int(hours_per_week)
     except:
         abort(403)
-    if not hours_per_week or (hours_per_week > 99):
-        abort(403)
+    if not hours_per_week or hours_per_week > 99 or hours_per_week < 1:
+        return "Please, for hours/week enter a number from 1 to 99"
 
     info = request.form["info"]
     if len(info) > 1000:
-            abort(403)
+            return "Please, make sure the plan info is no longer than 1000 characters."
 
     all_classes = plans.get_all_classes()
     classes = []
@@ -113,9 +114,9 @@ def update_plan():
         if entry:
             title, value = entry.split(":")
             if title not in all_classes:
-                abort(403)
+                return "Please only use the classes available in the drop down menu."
             if value not in all_classes[title]:
-                abort(403)
+                return "Please only use the classes available in the drop down menu."
             classes.append((title, value))
 
     plans.update_plan(plan_id, plan, hours_per_week, info, classes)
@@ -130,7 +131,7 @@ def edit_plan(plan_id):
     if not plan :
         abort(404)
     if plan["user_id"] != session["user_id"]:
-        abort(403)
+        return "Unfortunately, it seems you do not have permission to edit this plan."
     
     all_classes = plans.get_all_classes()
     classes = {}
@@ -147,9 +148,9 @@ def delete_plan(plan_id):
 
     plan = plans.get_plan(plan_id)
     if not plan:
-            abort(404)
+        abort(404)
     if plan["user_id"] != session["user_id"]:
-        abort(403)
+        return "Unfortunately you do not have permission to delete this plan.\nThis plan is not yours."
 
     if request.method == "GET":
         return render_template("delete_plan.html", plan=plan)
@@ -166,7 +167,7 @@ def delete_plan(plan_id):
 def show_plan(plan_id):
     plan = plans.get_plan(plan_id)
     if not plan:
-        abort(404)
+        return "It seems this plan does not exists."
     classes = plans.get_classes(plan_id)
     likes = plans.likes(plan_id)
     return render_template("show_plan.html", plan=plan, classes=classes, likes = likes)
@@ -177,18 +178,18 @@ def create_plans():
     check_csrf()
 
     plan = request.form["plan"]
-    if not plan or len(plan) > 50:
-        abort(403)
+    if not plan or len(plan) > 50 or len(plan) == 0:
+        return "Please make sure the plan title has 2 to 50 characters."
     hours_per_week = request.form["hours_per_week"]
     try:
         hours_per_week = int(hours_per_week)
     except:
         abort(403)
-    if not hours_per_week or (hours_per_week > 99):
-        abort(403)
+    if not hours_per_week or hours_per_week > 99 or hours_per_week < 1:
+        return "Please, for hours/week enter a number from 1 to 99"
     info = request.form["info"]
     if len(info) > 1000:
-        abort(403)
+        return "Please, make sure the plan info is no longer than 1000 characters."
 
     user_id = session["user_id"]
     all_classes = plans.get_all_classes()
@@ -198,9 +199,9 @@ def create_plans():
         if entry:
             title, value = entry.split(":")
             if title not in all_classes:
-                abort(403)
+                return "Please only use the classes available in the drop down menu."
             if value not in all_classes[title]:
-                abort(403)
+                return "Please only use the classes available in the drop down menu."
             classes.append((title, value))
 
     plans.add_plans(plan, hours_per_week, info, user_id, classes)
@@ -233,13 +234,15 @@ def create():
     password2 = request.form["password2"]
     if password1 != password2:
         return "Error: the passwords do not match"
+    if " " in username or " " in password1 or " " in password2:
+        return "Please do not use a space character in your username or password."
 
     try:
         users.create_user(username, password1)
-    except slite3.IntegirtyError:
+    except sqlite3.IntegrityError:
         return "Error: the usename is taken"
 
-    return "Username created :3"
+    return "Username created :3\nPlease, got back to the main page and log in."
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
