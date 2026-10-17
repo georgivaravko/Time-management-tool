@@ -8,6 +8,7 @@
     <h1>Delete your plan here</h1> 
     <h3>Attention this action cannot be undone!</h3> 
     <form action="/delete_plan/{{ plan.plan_id }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="submit" name="delete" value="Delete {{plan.plan}} from your plans"><br >
         <input type="submit" name="cancel" value="Cancel">
     </form>

@@ -68,6 +68,8 @@ def update_plan(plan_id, plan, hours_per_week, info, classes):
         db.execute(sql, [plan_id, title, value])
 
 def delete_plan(plan_id):
+    sql = "DELETE FROM likes WHERE plan_id = ?"
+    db.execute(sql, [plan_id])
     sql = "DELETE FROM plan_classes WHERE plan_id = ?"
     db.execute(sql, [plan_id])
     sql ="DELETE FROM plans WHERE id = ?"

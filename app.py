@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite3, secrets
 from flask import Flask
 from flask import redirect, make_response, render_template, request, session, abort
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -6,6 +6,12 @@ import db, config, plans, users
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+def check_csrf():
+    if "csrf_token" not in request.form:
+        abort(403)
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)
 
 @app.route("/profile_picture/<int:user_id>")
 def show_profile_picture(user_id):
@@ -25,6 +31,7 @@ def add_profile_picture():
         return render_template("profile_picture.html")
 
     if request.method == "POST":
+        check_csrf()
         file = request.files["profile_picture"]
         if not file.filename.endswith(".jpg"):
             return "Error: please submit a .jpg file"
@@ -40,6 +47,7 @@ def add_profile_picture():
 @app.route("/like", methods=["POST"])
 def like():
     require_login()
+    check_csrf()
     user_id = request.form["user_id"]
 
     plan_id = request.form["plan_id"]
@@ -75,6 +83,7 @@ def search():
 
 @app.route("/update_plan", methods=["POST"])
 def update_plan():
+    check_csrf()
     plan_id = request.form["plan_id"]
     plan = plans.get_plan(plan_id)
     if not plan:
@@ -146,6 +155,7 @@ def delete_plan(plan_id):
         return render_template("delete_plan.html", plan=plan)
 
     if request.method == "POST":
+        check_csrf()
         if "delete" in request.form:
             plans.delete_plan(plan_id)
             return redirect("/")
@@ -164,6 +174,7 @@ def show_plan(plan_id):
 @app.route("/create_plans", methods=["POST"])
 def create_plans():
     require_login()
+    check_csrf()
 
     plan = request.form["plan"]
     if not plan or len(plan) > 50:
@@ -243,6 +254,7 @@ def login():
         if user_id:
             session["user_id"] = user_id
             session["username"] = username
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/") 
         else:
             return "Error: incorrect username or password"

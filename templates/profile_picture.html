@@ -12,6 +12,7 @@
         <p>
         Picture: <input type="file" name="profile_picture" accept=".jpg" />
         </p>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="submit" value="Submit" />
     </form>
 
